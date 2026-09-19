@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
+from app.llm.models import LLMMetadata
 
 
 class RequirementLanguage(str, Enum):
@@ -68,6 +69,7 @@ class PromptRequest(BaseModel):
     raw_text: str = Field(..., min_length=1)
     language: RequirementLanguage = RequirementLanguage.THAI
     project_context_id: Optional[str] = None
+    enable_llm: Optional[bool] = None  # None uses server configuration default
     metadata: Dict[str, Any] = Field(default_factory=dict)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -171,3 +173,4 @@ class PromptTransformationResponse(BaseModel):
     analysis: RequirementAnalysis
     prompt: EngineeringPrompt
     validation: PromptValidationResult
+    llm_metadata: Optional[LLMMetadata] = None

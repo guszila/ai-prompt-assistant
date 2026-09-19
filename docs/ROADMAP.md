@@ -30,10 +30,16 @@ This document tracks the phased development of the **AI Engineering Assistant**.
 
 ---
 
-## Milestone 3: LLM Integration
-- [ ] Cloud LLM provider implementations (Anthropic Claude, OpenAI, Google Gemini).
-- [ ] Streaming response support.
-- [ ] Provider configuration and API key management.
+## Milestone 3: LLM Integration [COMPLETED]
+- [x] Provider-agnostic LLM interface (`BaseLLMProvider`) supporting structured JSON generation.
+- [x] Deterministic `MockLLMProvider` for reliable offline testing and failure simulation.
+- [x] `OpenAICompatibleProvider` implemented via `httpx` with bounded retries and exponential backoff.
+- [x] Security-hardened configuration using `pydantic.SecretStr` and sanitization in logs/errors.
+- [x] Untrusted model candidate boundary (`LLMRequirementCandidate`).
+- [x] `GroundingReconciler` enforcing strict priority: Explicit User Input > M2 Deterministic Baseline > LLM Candidate.
+- [x] Robust grounding safeguards: AuthN != AuthZ, generic API != RESTful API, blocking ungrounded database/tech and performance metric hallucinations.
+- [x] Graceful degradation: Failures originating from the optional LLM enhancement layer automatically fall back to the M2 deterministic baseline with typed failure reasons (`LLMFallbackReason`).
+- [x] Complete automated test suite (69 tests covering providers, reconciler, fallback modes, security sanitization, and M1/M2 regression).
 
 ---
 

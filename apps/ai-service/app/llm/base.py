@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterator, Dict, Optional
+from typing import Any, AsyncIterator, Dict, Optional, Tuple, Type, TypeVar
 from pydantic import BaseModel, Field
+from app.llm.models import LLMMetadata
+
+T = TypeVar("T", bound=BaseModel)
 
 
 class LLMResponse(BaseModel):
@@ -31,16 +34,30 @@ class BaseLLMProvider(ABC):
     @property
     @abstractmethod
     def provider_name(self) -> str:
-        """Name of the provider (e.g., anthropic, openai, gemini, ollama)."""
+        """Name of the provider (e.g., mock, openai)."""
         pass
 
     @abstractmethod
-    async def generate(self, prompt: str, **kwargs: Any) -> LLMResponse:
+    async def generate(self, prompt: str, system_prompt: Optional[str] = None, **kwargs: Any) -> LLMResponse:
         """Generate a complete response for the given prompt."""
         pass
 
     @abstractmethod
-    async def generate_stream(self, prompt: str, **kwargs: Any) -> AsyncIterator[str]:
+    async def generate_structured(
+        self,
+        prompt: str,
+        response_model: Type[T],
+        system_prompt: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Tuple[T, LLMMetadata]:
+        """
+        Generate structured output validated against a Pydantic model.
+        Returns the parsed model and execution metadata.
+        """
+        pass
+
+    @abstractmethod
+    async def generate_stream(self, prompt: str, system_prompt: Optional[str] = None, **kwargs: Any) -> AsyncIterator[str]:
         """Stream chunks of response text for the given prompt."""
         pass
 

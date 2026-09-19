@@ -78,3 +78,86 @@ PromptTransformationResponse
 3. **Explicit Assumptions**: Any inferred technical capability is tagged with `is_inferred = True` and surfaced as an explicit `Assumption` requiring user confirmation.
 4. **Deterministic Reproducibility**: Identical input text and configuration produce bit-for-bit identical markdown and structural analysis.
 
+---
+
+## 5. LLM Integration Layer & Grounding Architecture (Milestone 3)
+
+Milestone 3 introduces an optional, provider-agnostic **LLM Integration Layer** that enhances requirement understanding and prompt vocabulary without compromising the deterministic M2 baseline.
+
+### 5.1 Architecture & Pipeline Preservation
+
+```text
+                         User Requirement
+                                │
+                                ▼
+                     ┌────────────────────┐
+                     │ M2 Normalizer      │  (Preserves original text, Unicode cleaning)
+                     └─────────┬──────────┘
+                               ▼
+                     ┌────────────────────┐
+                     │ M2 Analyzer        │  (Extracts entities, actions, explicit constraints;
+                     │  ├── Terminology   │   AuthN != AuthZ, generic API != RESTful API;
+                     │  │   Mapper        │   Functional ambiguity detection)
+                     │  └── Ambiguity     │
+                     │      Detector      │
+                     └─────────┬──────────┘
+                               ▼
+                     ┌────────────────────┐
+                     │ M2 Baseline        │  (Authoritative Ground Truth Baseline)
+                     │ RequirementAnalysis│
+                     └─────────┬──────────┘
+                               │
+                    ┌──────────┴──────────┐
+                    │ (If LLM disabled)   │ (If LLM enabled)
+                    │                     ▼
+                    │            ┌────────────────────┐
+                    │            │ LLM Provider       │  (Receives User Text + M2 Baseline)
+                    │            └─────────┬──────────┘
+                    │                      ▼
+                    │            ┌────────────────────┐
+                    │            │ LLMRequirement     │  (Untrusted Candidate Model)
+                    │            │ Candidate          │
+                    │            └─────────┬──────────┘
+                    │                      │
+                    └──────────┬───────────┘
+                               ▼
+                    ┌────────────────────┐
+                    │ Grounding          │  (Level 1: Explicit User Input
+                    │ Reconciler         │   > Level 2: M2 Deterministic Baseline
+                    └─────────┬──────────┘   > Level 3: LLM Candidate)
+                              ▼
+                     Grounded Requirement
+                          Analysis
+                              │
+                              ▼
+                    ┌────────────────────┐
+                    │ Prompt Composer    │  (Deterministic Markdown Assembly)
+                    └─────────┬──────────┘
+                              ▼
+                    ┌────────────────────┐
+                    │ Prompt Validator   │  (Integrity & Anti-Fabrication Check)
+                    └─────────┬──────────┘
+                              ▼
+                     Final Engineering
+                           Prompt
+```
+
+### 5.2 Grounding & Reconciliation Guarantees
+1. **Explicit Priority Order**:
+   - **Level 1 (Explicit User Input)**: Cannot be contradicted, overridden, or deleted by the LLM.
+   - **Level 2 (M2 Deterministic Analysis)**: Authoritative baseline for concept mapping.
+   - **Level 3 (LLM Candidate)**: Untrusted suggestions. May enrich vocabulary, suggest clarifications, or propose architectural assumptions.
+2. **Strict Category Distinction**:
+   - Explicit Requirements (user commanded).
+   - Inferred Concepts (rule-based M2 mappings).
+   - Assumptions (unconfirmed model inferences requiring user review).
+   - Clarifications (targeted functional questions).
+3. **Anti-Hallucination Boundaries**:
+   - Login input will **never** generate confirmed Authorization/RBAC requirements unless explicitly commanded.
+   - Generic "API" input will **never** generate confirmed RESTful API requirements unless explicitly commanded.
+   - Speculative databases (PostgreSQL, Redis, MongoDB) and performance numbers (<500ms, 99.9%) are strictly blocked from entering requirements and acceptance criteria.
+
+### 5.3 Failure Isolation & Graceful Degradation
+Failures originating from the optional LLM enhancement layer (network drop, timeout, 401, 429, schema validation) do not break the core prompt transformation pipeline. The system catches the error, sets a typed failure reason (`LLMFallbackReason`), and immediately falls back to the authoritative M2 baseline analysis.
+
+

@@ -8,7 +8,7 @@ class AppState {
       url: 'http://127.0.0.1:8000',
     },
     tauriAvailable: typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window,
-    activeMilestone: 'M1 - Foundation',
+    activeMilestone: 'M3 - LLM Integration',
   });
 
   async refreshHealth(): Promise<void> {

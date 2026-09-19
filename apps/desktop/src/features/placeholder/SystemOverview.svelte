@@ -47,8 +47,8 @@
         <h3>Current Phase</h3>
         <span class="pill active-pill">{appState.system.activeMilestone}</span>
       </div>
-      <p class="info-line">Strict M1 Scope: Foundation Only</p>
-      <p class="note">Prompt engine (M2), LLM (M3), Quality (M4), and Qdrant/RAG (M5) safely decoupled.</p>
+      <p class="info-line">Phase M3: Core Prompt Engine + LLM Integration</p>
+      <p class="note">M2 deterministic baseline preserved. LLM enhancement layer with GroundingReconciler and fallback active.</p>
     </div>
   </div>
 </div>

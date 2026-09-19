@@ -80,3 +80,33 @@ def test_analyze_endpoint_whitespace_returns_400():
 def test_analyze_endpoint_missing_body_returns_422():
     response = client.post("/v1/prompts/analyze", json={})
     assert response.status_code == 422
+
+
+def test_analyze_endpoint_with_llm_enabled():
+    payload = {
+        "raw_text": REQ_THAI_CRUD,
+        "enable_llm": True,
+    }
+    response = client.post("/v1/prompts/analyze", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert "llm_metadata" in data
+    assert data["llm_metadata"] is not None
+    assert data["llm_metadata"]["enhanced"] is True
+    assert data["llm_metadata"]["fallback_used"] is False
+
+
+def test_analyze_endpoint_with_llm_disabled():
+    payload = {
+        "raw_text": REQ_THAI_CRUD,
+        "enable_llm": False,
+    }
+    response = client.post("/v1/prompts/analyze", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert "llm_metadata" in data
+    assert data["llm_metadata"] is not None
+    assert data["llm_metadata"]["enhanced"] is False
+    assert data["llm_metadata"]["fallback_used"] is False
+    assert data["llm_metadata"]["fallback_reason"] is None
+

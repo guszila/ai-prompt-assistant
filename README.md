@@ -118,10 +118,10 @@ npm run build      # Build frontend production bundle
 
 ## 5. Phased Roadmap (M1–M9)
 
-- **M1 — Foundation**: ✅ Current Milestone (Monorepo, Svelte 5 desktop shell, FastAPI AI service, SQLite persistence foundation, domain contracts, and agent rules).
-- **M2 — Core Prompt Engine**: Prompt transformation pipeline (Thai requirements to structured prompts).
-- **M3 — LLM Integration**: Cloud LLM providers (Anthropic, OpenAI, Gemini) via `BaseLLMProvider`.
-- **M4 — Prompt Quality System**: Heuristics, ambiguity detection, and prompt scoring.
+- **M1 — Foundation**: ✅ Completed (Monorepo, Svelte 5 desktop shell, FastAPI AI service, SQLite persistence foundation, domain contracts, and agent rules).
+- **M2 — Core Prompt Engine**: ✅ Completed (Deterministic prompt transformation pipeline, AuthN/AuthZ separation, API separation, anti-fabrication validator).
+- **M3 — LLM Integration**: ✅ Completed (Provider abstraction, Mock & OpenAI-compatible providers, GroundingReconciler, graceful M2 fallback).
+- **M4 — Prompt Quality System**: Heuristics, quality scoring, and automated clarification refinement.
 - **M5 — Knowledge / RAG**: Introduction of Qdrant vector database and semantic prompt template retrieval.
 - **M6 — Multi-Agent System**: Requirement Analyzer, Engineering Translator, Prompt Architect, and Prompt Reviewer agents.
 - **M7 — Learning System**: User feedback collection and experience data curation.

@@ -15,6 +15,7 @@ export interface PromptRequest {
   rawText: string;
   language: RequirementLanguage;
   projectContextId?: string;
+  enableLlm?: boolean;
   metadata?: Record<string, unknown>;
   createdAt: string;
 }
@@ -134,7 +135,40 @@ export interface PromptValidationResult {
 }
 
 /**
- * Complete aggregated response for prompt analysis and generation (M2).
+ * Specific failure reasons triggering fallback to M2 deterministic baseline (M3).
+ */
+export type LLMFallbackReason =
+  | 'configuration_error'
+  | 'authentication_error'
+  | 'timeout'
+  | 'rate_limit'
+  | 'network_error'
+  | 'validation_error';
+
+/**
+ * Token consumption metrics for an LLM call (M3).
+ */
+export interface LLMUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+}
+
+/**
+ * Execution and provenance metadata for the LLM enhancement step (M3).
+ */
+export interface LLMMetadata {
+  provider: string;
+  model: string;
+  enhanced: boolean;
+  fallbackUsed: boolean;
+  fallbackReason?: LLMFallbackReason | null;
+  latencyMs?: number | null;
+  usage?: LLMUsage | null;
+}
+
+/**
+ * Complete aggregated response for prompt analysis and generation (M2 + M3).
  */
 export interface PromptTransformationResponse {
   requestId: string;
@@ -142,6 +176,7 @@ export interface PromptTransformationResponse {
   analysis: RequirementAnalysis;
   prompt: EngineeringPrompt;
   validation: PromptValidationResult;
+  llmMetadata?: LLMMetadata | null;
 }
 
 /**

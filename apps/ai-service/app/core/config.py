@@ -1,4 +1,6 @@
 from pathlib import Path
+from typing import Optional
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,8 +21,17 @@ class Settings(BaseSettings):
     # Embedded SQLite Database (Desktop-First)
     SQLITE_DB_PATH: str = "data/app.db"
 
-    # LLM Settings (Provider-agnostic in M1)
+    # LLM Settings (M3)
     DEFAULT_LLM_PROVIDER: str = "mock"
+    LLM_ENABLED: bool = False
+    LLM_PROVIDER: str = "mock"
+    LLM_MODEL: str = "gpt-4o-mini"
+    LLM_API_KEY: Optional[SecretStr] = None
+    LLM_BASE_URL: Optional[str] = None
+    LLM_TEMPERATURE: float = 0.2
+    LLM_MAX_TOKENS: int = 2048
+    LLM_TIMEOUT_SECONDS: float = 15.0
+    LLM_MAX_RETRIES: int = 2
 
     @property
     def resolved_sqlite_path(self) -> Path:

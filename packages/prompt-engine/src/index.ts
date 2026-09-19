@@ -16,6 +16,6 @@ export interface IPromptEngine {
   transform?(request: PromptRequest): Promise<PromptTransformationResponse>;
 }
 
-export const ENGINE_VERSION = '0.2.0-core-engine';
+export const ENGINE_VERSION = '0.3.0-llm-integration';
 
 export * from '@ai-assistant/shared-types';
