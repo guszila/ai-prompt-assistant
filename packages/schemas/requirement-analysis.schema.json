@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RequirementAnalysis",
+  "type": "object",
+  "properties": {
+    "requestId": { "type": "string" },
+    "originalRequirement": { "type": "string" },
+    "normalizedRequirement": { "type": "string" },
+    "intent": { "type": "string" },
+    "requestedActions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "entities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "technicalConcepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "confidence": { "type": "number" },
+          "sourceTerms": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "isInferred": { "type": "boolean" }
+        },
+        "required": ["name", "category", "confidence", "sourceTerms", "isInferred"]
+      }
+    },
+    "expectedOutput": { "type": ["string", "null"] },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ambiguityId": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+          "relatedRequirement": { "type": "string" },
+          "clarificationQuestion": { "type": "string" },
+          "isFunctional": { "type": "boolean" }
+        },
+        "required": ["ambiguityId", "description", "severity", "relatedRequirement", "clarificationQuestion", "isFunctional"]
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "assumptionId": { "type": "string" },
+          "description": { "type": "string" },
+          "sourceConcept": { "type": "string" },
+          "requiresConfirmation": { "type": "boolean" }
+        },
+        "required": ["assumptionId", "description", "sourceConcept", "requiresConfirmation"]
+      }
+    }
+  },
+  "required": [
+    "requestId",
+    "originalRequirement",
+    "normalizedRequirement",
+    "intent",
+    "requestedActions",
+    "entities",
+    "constraints",
+    "technicalConcepts",
+    "ambiguities",
+    "assumptions"
+  ]
+}

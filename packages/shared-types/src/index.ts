@@ -1,10 +1,11 @@
 /**
  * AI Engineering Assistant - Shared Domain Contracts
- * Lightweight type contracts defining system boundaries (M1).
+ * Lightweight type contracts defining system boundaries (M1 + M2).
  */
 
-export type RequirementLanguage = 'th' | 'en';
+export type RequirementLanguage = 'th' | 'en' | 'mixed';
 export type PromptStatus = 'draft' | 'analyzed' | 'generated' | 'reviewed' | 'approved' | 'rejected';
+export type AmbiguitySeverity = 'low' | 'medium' | 'high';
 
 /**
  * Incoming natural language requirement from user.
@@ -19,7 +20,68 @@ export interface PromptRequest {
 }
 
 /**
- * Identified technical intent, ambiguity, and constraints.
+ * Structured representation of missing or unclear requirement information.
+ */
+export interface Ambiguity {
+  ambiguityId: string;
+  description: string;
+  severity: AmbiguitySeverity;
+  relatedRequirement: string;
+  clarificationQuestion: string;
+  isFunctional: boolean;
+}
+
+/**
+ * Explicitly captured inference derived from user wording.
+ */
+export interface Assumption {
+  assumptionId: string;
+  description: string;
+  sourceConcept: string;
+  requiresConfirmation: boolean;
+}
+
+/**
+ * Identified software engineering concept.
+ */
+export interface TechnicalConcept {
+  name: string;
+  category: string;
+  confidence: number;
+  sourceTerms: string[];
+  isInferred: boolean;
+}
+
+/**
+ * Normalized representation of user input while preserving the exact original.
+ */
+export interface NormalizedRequirement {
+  originalText: string;
+  normalizedText: string;
+  detectedLanguage: RequirementLanguage;
+  charCount: number;
+  wordCount: number;
+}
+
+/**
+ * Structured analysis of user requirement without requirement fabrication (M2).
+ */
+export interface RequirementAnalysis {
+  requestId: string;
+  originalRequirement: string;
+  normalizedRequirement: string;
+  intent: string;
+  requestedActions: string[];
+  entities: string[];
+  constraints: string[];
+  technicalConcepts: TechnicalConcept[];
+  expectedOutput?: string;
+  ambiguities: Ambiguity[];
+  assumptions: Assumption[];
+}
+
+/**
+ * Identified technical intent, ambiguity, and constraints (M1 backward-compatible).
  */
 export interface PromptAnalysis {
   requestId: string;
@@ -38,15 +100,48 @@ export interface EngineeringPrompt {
   id: string;
   requestId: string;
   title: string;
-  systemContext: string;
-  roleDefinition: string;
-  taskInstructions: string;
-  technicalConstraints: string[];
-  inputOutputSpecification: string;
-  verificationSteps: string[];
+  role?: string;
+  objective?: string;
+  context?: string;
+  requirements?: string[];
+  technicalDetails?: string[];
+  constraints?: string[];
+  expectedOutput?: string;
+  acceptanceCriteria?: string[];
+  assumptions?: string[];
+  clarificationQuestions?: string[];
+  rawMarkdown?: string;
+  // M1 backward-compatibility fields:
+  systemContext?: string;
+  roleDefinition?: string;
+  taskInstructions?: string;
+  technicalConstraints?: string[];
+  inputOutputSpecification?: string;
+  verificationSteps?: string[];
   version: number;
   status: PromptStatus;
   createdAt: string;
+}
+
+/**
+ * Validation report for structured prompt and analysis.
+ */
+export interface PromptValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+  validatedAt: string;
+}
+
+/**
+ * Complete aggregated response for prompt analysis and generation (M2).
+ */
+export interface PromptTransformationResponse {
+  requestId: string;
+  normalized: NormalizedRequirement;
+  analysis: RequirementAnalysis;
+  prompt: EngineeringPrompt;
+  validation: PromptValidationResult;
 }
 
 /**

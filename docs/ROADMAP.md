@@ -4,7 +4,7 @@ This document tracks the phased development of the **AI Engineering Assistant**.
 
 ---
 
-## Milestone 1: Foundation [CURRENT]
+## Milestone 1: Foundation [COMPLETED]
 - [x] Monorepo repository structure (`apps/*`, `packages/*`, `data/*`, `docs/*`).
 - [x] Tauri 2 + Svelte 5 + TypeScript desktop scaffold with modular UI shell.
 - [x] Python 3.13 + FastAPI AI service with `/health` endpoint and test suite.
@@ -16,10 +16,17 @@ This document tracks the phased development of the **AI Engineering Assistant**.
 
 ---
 
-## Milestone 2: Core Prompt Engine
-- [ ] Core prompt transformation pipeline (Thai requirements to structured prompts).
-- [ ] Prompt templates and markdown preview interface in desktop UI.
-- [ ] Direct loopback integration between desktop and AI service.
+## Milestone 2: Core Prompt Engine [COMPLETED]
+- [x] Deterministic 5-stage prompt transformation pipeline:
+  - `RequirementNormalizer`: Unicode normalization, whitespace collapsing, Thai/English/mixed language detection.
+  - `RequirementAnalyzer`: Intent extraction, entity & action recognition, explicit constraint extraction without fabrication.
+  - `EngineeringTerminologyMapper`: Separation of Authentication from Authorization, generic API from RESTful API, inferred concepts tagged with explicit Assumptions.
+  - `AmbiguityDetector`: Functional ambiguity detection and targeted clarification questions without speculative tech stack demands.
+  - `PromptComposer`: Deterministic Markdown assembly, omission of empty sections, formalization of acceptance criteria without invented performance metrics.
+  - `PromptValidator`: Integrity checks against missing fields, isolated assumptions, and ungrounded latency/throughput metrics.
+- [x] FastAPI endpoint `POST /v1/prompts/analyze` with `PromptService` coordination.
+- [x] Shared TypeScript contracts (`@ai-assistant/shared-types`, `@ai-assistant/prompt-engine`) and JSON Schemas (`requirement-analysis.schema.json`).
+- [x] Comprehensive test suite (42 automated unit, integration, deterministic, and API tests).
 
 ---
 
