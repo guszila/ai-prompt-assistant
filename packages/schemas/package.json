@@ -1,0 +1,7 @@
+{
+  "name": "@ai-assistant/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JSON Schemas for validation and serialization",
+  "main": "index.js"
+}

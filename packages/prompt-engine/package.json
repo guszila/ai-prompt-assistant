@@ -1,0 +1,17 @@
+{
+  "name": "@ai-assistant/prompt-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Foundational prompt engine interfaces and rules",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ai-assistant/shared-types": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

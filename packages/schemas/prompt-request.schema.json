@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PromptRequest",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "rawText": { "type": "string", "minLength": 1 },
+    "language": { "type": "string", "enum": ["th", "en"] },
+    "projectContextId": { "type": "string" },
+    "metadata": { "type": "object" },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "required": ["id", "rawText", "language", "createdAt"]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ai-engineering-assistant-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Engineering Assistant Monorepo - Transforming Thai requirements into structured engineering prompts",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "desktop:dev": "npm run --workspace=@ai-assistant/desktop dev",
+    "desktop:build": "npm run --workspace=@ai-assistant/desktop build",
+    "desktop:check": "npm run --workspace=@ai-assistant/desktop check"
+  },
+  "keywords": [
+    "ai-engineering-assistant",
+    "tauri",
+    "svelte5",
+    "fastapi",
+    "prompt-engineering"
+  ],
+  "author": "guszila",
+  "license": "MIT"
+}

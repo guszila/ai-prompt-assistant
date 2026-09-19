@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EngineeringPrompt",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "requestId": { "type": "string" },
+    "title": { "type": "string" },
+    "systemContext": { "type": "string" },
+    "roleDefinition": { "type": "string" },
+    "taskInstructions": { "type": "string" },
+    "technicalConstraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "inputOutputSpecification": { "type": "string" },
+    "verificationSteps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "version": { "type": "integer", "minimum": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "analyzed", "generated", "reviewed", "approved", "rejected"]
+    },
+    "createdAt": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "id",
+    "requestId",
+    "title",
+    "systemContext",
+    "roleDefinition",
+    "taskInstructions",
+    "technicalConstraints",
+    "inputOutputSpecification",
+    "verificationSteps",
+    "version",
+    "status",
+    "createdAt"
+  ]
+}
